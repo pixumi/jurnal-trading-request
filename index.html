@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jurnal Trading Asteroid</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,700&display=swap" rel="stylesheet">
+  
+  <!-- Script untuk mencegah flash putih di dark mode -->
+  <script>
+    // Periksa preferensi dark mode sebelum DOM dimuat
+    (function() {
+      document.documentElement.classList.remove('no-js');
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark-mode');
+      }
+    })();
+  </script>
+  
+  <!-- LINK to External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Header Dinamis -->
+  <header id="dynamicHeader">
+    <div class="header-title">
+      <span>📜</span>
+      <span>Jurnal Trading</span>
+    </div>
+    <div class="header-actions">
+      <!-- Tombol baru untuk Export/Import -->
+      <button id="exportJsonBtn" class="data-btn">
+        <span>💾</span>
+        <span>Export Data</span>
+      </button>
+      <button id="importJsonBtn" class="data-btn">
+        <span>📂</span>
+        <span>Import Data</span>
+      </button>
+      <div class="dark-mode-toggle">
+        <span>Dark Mode</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </header>
+  
+  <div class="container">
+    <!-- Analytics Section -->
+    <div class="analytics-container">
+      <h1 class="analytics-title">📊 Statistik</h1>
+      <div class="analytics-grid">
+        <div class="stat-box">
+          <div class="stat-label">Total Trade</div>
+          <div id="totalTrades" class="stat-value">0</div>
+          <div class="stat-subtext">Semua Transaksi</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Win</div>
+          <div id="winTrades" class="stat-value winrate-value">0</div>
+          <div class="stat-subtext">Transaksi Sukses</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Loss</div>
+          <div id="lossTrades" class="stat-value lossrate-value">0</div>
+          <div class="stat-subtext">Transaksi Gagal</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Winrate</div>
+          <div id="winrate" class="stat-value winrate-value">0%</div>
+          <div class="stat-subtext">Persentase Sukses</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Profit Factor</div>
+          <div id="profitFactor" class="stat-value profit-factor-value">0.00</div>
+          <div class="stat-subtext">Rasio Profit</div>
+        </div>
+      </div>
+      <div class="analytics-chart">
+        <div id="winBar" class="win-bar" style="width: 0%"></div>
+        <div id="lossBar" class="loss-bar" style="width: 0%"></div>
+      </div>
+      <div class="chart-labels">
+        <span>Win: <span id="winPercentage">0%</span></span>
+        <span>Loss: <span id="lossPercentage">0%</span></span>
+      </div>
+    </div>
+    
+    <form id="tradeForm">
+      <div class="input-row">
+        <div>
+          <label for="pair">🔗 Pair</label>
+          <input type="text" id="pair" name="pair" placeholder="Contoh: XAUUSD" required />
+        </div>
+        <div class="date-wrapper">
+          <label for="date">📅 Date</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+      </div>
+      <div class="input-row">
+        <div>
+          <label for="session">🌍 Session</label>
+          <select id="session" name="session" required>
+            <option value="Asia">Asia</option>
+            <option value="London">London</option>
+            <option value="New York">New York</option>
+          </select>
+        </div>
+        <div>
+          <label for="entry">📝 Entry</label>
+          <select id="entry" name="entry" required>
+            <option value="Buy">Buy</option>
+            <option value="Sell">Sell</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-row">
+        <div>
+          <label for="wl">🏆 Win/Loss</label>
+          <select id="wl" name="wl" required>
+            <option value="Win">Win</option>
+            <option value="Loss">Loss</option>
+          </select>
+        </div>
+        <div>
+          <label for="rr">⚖️ RR</label>
+          <input type="text" id="rr" name="rr" placeholder="Contoh: 1:2/1:1.5" required />
+        </div>
+      </div>
+      <div>
+        <label for="note">🗒️ Reason</label>
+        <textarea id="note" name="note" rows="1" placeholder="Tulis catatan tambahan..."></textarea>
+      </div>
+      
+      <div class="input-row">
+        <div>
+          <label for="before">📈 Before (Chart Entry)</label>
+          <input type="text" id="before" name="before" placeholder="Link chart sebelum entry">
+        </div>
+        <div>
+          <label for="after">📉 After (Chart Exit)</label>
+          <input type="text" id="after" name="after" placeholder="Link chart setelah exit">
+        </div>
+      </div>
+
+      <button type="submit">Simpan Trade</button>
+    </form>
+
+
+    <!-- Container Quote -->
+    <div id="quoteContainer" class="quote-container">
+      <blockquote id="quoteText">"Market are not casino, where you throw a quarter and expect luckily to get rich, trading is a business and as a business you need to have a plan and follow it." <br><br>
+      --NN--</blockquote>
+    </div>
+
+    <div class="table-wrapper">
+
+    <div class="table-wrapper">
+        <table class="history-table">  
+            <thead>
+            <tr>
+            <th>No.</th>
+            <th>Pair</th>
+            <th>Date</th>
+            <th>Session</th>
+            <th>Entry</th>
+            <th>Win/Loss</th>
+            <th>RR</th>
+            <th>Reason</th>
+            <th>Before</th>
+            <th>After</th>
+            <th>Action</th>
+            </tr>
+             </thead>
+             <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+  
+    <!-- Modal Popup -->
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button id="modalClose" class="modal-close" aria-label="Tutup modal">✖️</button>
+            <textarea id="modalText" readonly rows="8"></textarea>
+        </div>
+    </div>
+    
+    <!-- Input file untuk import -->
+    <input type="file" id="importFileInput" accept=".json">
+  </div>
+
+  <!-- Link to External JS -->
+  <script src="src/analytics.js"></script>
+  <script src="src/tradeLimits.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
